@@ -19,7 +19,7 @@ class CityResource extends Resource
 {
   protected static ?string $model = City::class;
 
-  protected static ?string $navigationIcon = 'heroicon-o-collection';
+  protected static ?string $navigationIcon = 'heroicon-o-office-building';
   protected static ?string $navigationGroup = 'System Management';
 
 
