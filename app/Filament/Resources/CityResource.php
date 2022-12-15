@@ -2,24 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CountryResource\Pages;
-use App\Filament\Resources\CountryResource\RelationManagers;
-use App\Models\Country;
+use App\Filament\Resources\CityResource\Pages;
+use App\Filament\Resources\CityResource\RelationManagers;
+use App\Models\City;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CountryResource extends Resource
+class CityResource extends Resource
 {
-  protected static ?string $model = Country::class;
+  protected static ?string $model = City::class;
 
   protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -29,9 +27,12 @@ class CountryResource extends Resource
       ->schema([
         Card::make()
           ->schema([
-            TextInput::make('country_code'),
-            TextInput::make('name')
+            Select::make('state_id')->relationship('state', 'name')->searchable()->preload()->required(),
+            Forms\Components\TextInput::make('name')
+              ->required()
+              ->maxLength(255),
           ])
+
       ]);
   }
 
@@ -39,10 +40,13 @@ class CountryResource extends Resource
   {
     return $table
       ->columns([
-        TextColumn::make('id')->sortable(),
-        TextColumn::make('name')->sortable()->searchable(),
-        TextColumn::make('country_code')->sortable()->searchable(),
-        TextColumn::make('created_at')->dateTime()
+        Tables\Columns\TextColumn::make('id')->searchable()->sortable(),
+        Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
+        Tables\Columns\TextColumn::make('state.name')->searchable()->sortable(),
+        Tables\Columns\TextColumn::make('created_at')
+          ->dateTime(),
+        Tables\Columns\TextColumn::make('updated_at')
+          ->dateTime(),
       ])
       ->filters([
         //
@@ -65,9 +69,9 @@ class CountryResource extends Resource
   public static function getPages(): array
   {
     return [
-      'index' => Pages\ListCountries::route('/'),
-      'create' => Pages\CreateCountry::route('/create'),
-      'edit' => Pages\EditCountry::route('/{record}/edit'),
+      'index' => Pages\ListCities::route('/'),
+      'create' => Pages\CreateCity::route('/create'),
+      'edit' => Pages\EditCity::route('/{record}/edit'),
     ];
   }
 }

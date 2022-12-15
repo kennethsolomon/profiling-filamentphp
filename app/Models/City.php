@@ -14,7 +14,7 @@ class City extends Model
         'name',
     ];
 
-    public function sate()
+    public function state()
     {
         return $this->belongsTo(State::class);
     }
