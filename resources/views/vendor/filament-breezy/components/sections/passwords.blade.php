@@ -13,13 +13,13 @@
 
             {{ $this->updatePasswordForm }}
 
-            <x-slot name="footer">
+            <!-- <x-slot name="footer">
                 <div class="text-right">
                     <x-filament::button type="submit">
                         {{ __('filament-breezy::default.profile.password.submit.label') }}
                     </x-filament::button>
                 </div>
-            </x-slot>
+            </x-slot> -->
         </x-filament::card>
     </form>
 

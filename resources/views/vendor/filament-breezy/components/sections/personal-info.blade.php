@@ -13,13 +13,13 @@
 
             {{ $this->updateProfileForm }}
 
-            <x-slot name="footer">
+            <!-- <x-slot name="footer">
                 <div class="text-right">
                     <x-filament::button type="submit">
                         {{ __('filament-breezy::default.profile.personal_info.submit.label') }}
                     </x-filament::button>
                 </div>
-            </x-slot>
+            </x-slot> -->
         </x-filament::card>
     </form>
 

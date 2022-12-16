@@ -19,7 +19,8 @@ class EmployeesOverview extends BaseWidget
         $tillDate_last_month = Carbon::now()->subMonth()->endOfMonth()->toDateString();
         $total_employee_last_month = Employee::whereBetween('created_at', [$fromDate_last_month, $tillDate_last_month])->count();
 
-        $total_percentage_increase = round(($total_employee_this_month - $total_employee_last_month)  / $total_employee_this_month * 100, 2);
+        $total_percentage_increase = ($total_employee_last_month - $total_employee_this_month) != 0
+            ? round(($total_employee_this_month - $total_employee_last_month)  / $total_employee_this_month * 100, 2) : 0;
         $increase = $total_employee_last_month - $total_employee_this_month;
 
         return [

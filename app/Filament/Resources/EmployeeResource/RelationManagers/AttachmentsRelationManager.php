@@ -52,7 +52,7 @@ class AttachmentsRelationManager extends RelationManager
       ])
       ->filters([
         Filter::make('attachment')
-          ->label('Has Attachment')
+          ->label('Has attachment')
           ->query(fn (Builder $query): Builder => $query->where('attachment', '!=', null))
           ->query(fn (Builder $query): Builder => $query->where('attachment', '!=', '')),
         Filter::make('No Attachment')
