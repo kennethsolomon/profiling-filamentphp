@@ -4,20 +4,25 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\EmployeeResource\Pages;
 use App\Filament\Resources\EmployeeResource\RelationManagers;
+use App\Filament\Resources\EmployeeResource\RelationManagers\AttachmentsRelationManager;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Employee;
 use App\Models\State;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -35,47 +40,39 @@ class EmployeeResource extends Resource
         Card::make()
           ->schema([
 
-            Select::make('country_id')
-              ->label('Country')
-              ->options(Country::all()->pluck('name', 'id')->toArray())->reactive()
-              ->afterStateUpdated(fn (callable $set) => $set('state_id', null)),
+            // Select::make('country_id')
+            //   ->label('Country')
+            //   ->options(Country::all()->pluck('name', 'id')->toArray())->reactive()
+            //   ->afterStateUpdated(fn (callable $set) => $set('state_id', null)),
 
-            Select::make('state_id')
-              ->label('State')
-              ->options(function (callable $get) {
-                $country = Country::find($get('country_id'));
-                return $country ? $country->states->pluck('name', 'id') : State::all()->pluck('name', 'id');
-              })->reactive()
-              ->afterStateUpdated(fn (callable $set) => $set('city_id', null)),
+            // Select::make('state_id')
+            //   ->label('State')
+            //   ->options(function (callable $get) {
+            //     $country = Country::find($get('country_id'));
+            //     return $country ? $country->states->pluck('name', 'id') : State::all()->pluck('name', 'id');
+            //   })->reactive()
+            //   ->afterStateUpdated(fn (callable $set) => $set('city_id', null)),
 
-            Select::make('city_id')
-              ->label('City')
-              ->options(function (callable $get) {
-                $state = State::find($get('state_id'));
-                return $state ? $state->cities->pluck('name', 'id') : City::all()->pluck('name', 'id');
-              })->reactive(),
+            // Select::make('city_id')
+            //   ->label('City')
+            //   ->options(function (callable $get) {
+            //     $state = State::find($get('state_id'));
+            //     return $state ? $state->cities->pluck('name', 'id') : City::all()->pluck('name', 'id');
+            //   })->reactive(),
 
             Select::make('department_id')->relationship('department', 'name')->searchable()->preload()->required(),
-            Forms\Components\TextInput::make('first_name')
-              ->required()
-              ->maxLength(255),
-            Forms\Components\TextInput::make('middle_name')
-              ->maxLength(255),
-            Forms\Components\TextInput::make('last_name')
-              ->required()
-              ->maxLength(255),
-            Forms\Components\TextInput::make('address')
-              ->required()
-              ->maxLength(255),
-            Forms\Components\TextInput::make('zip_code')
-              ->required()
-              ->maxLength(255),
-            Forms\Components\DatePicker::make('birth_date')
-              ->required(),
+            TextInput::make('employee_number')->required()->maxLength(255),
+            TextInput::make('first_name')->required()->maxLength(255),
+            TextInput::make('middle_name')->maxLength(255),
+            TextInput::make('last_name')->required()->maxLength(255),
+            TextInput::make('address')->required()->maxLength(255),
+            DatePicker::make('birth_date')->required(),
+            TextInput::make('phone_number')->tel()->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/')->required(),
+            TextInput::make('zip_code')->required()->maxLength(255),
+            DatePicker::make('date_hired')->required(),
             Toggle::make('is_active')->required(),
-            Forms\Components\DatePicker::make('date_hired')
-              ->required(),
           ])
+          ->columns(3)
       ]);
   }
 
@@ -83,24 +80,24 @@ class EmployeeResource extends Resource
   {
     return $table
       ->columns([
-        Tables\Columns\TextColumn::make('first_name')->searchable(),
-        Tables\Columns\TextColumn::make('middle_name')->searchable(),
-        Tables\Columns\TextColumn::make('last_name')->searchable(),
-        Tables\Columns\TextColumn::make('department.name')->searchable()->sortable(),
-        Tables\Columns\TextColumn::make('address')->searchable(),
-        Tables\Columns\TextColumn::make('zip_code')->searchable(),
-        Tables\Columns\TextColumn::make('birth_date')
-          ->date(),
+        TextColumn::make('department.name')->searchable()->sortable(),
+        TextColumn::make('employee_number')->searchable(),
+        TextColumn::make('first_name')->searchable(),
+        TextColumn::make('middle_name')->searchable(),
+        TextColumn::make('last_name')->searchable(),
+        TextColumn::make('address')->searchable(),
+        TextColumn::make('birth_date')->date(),
+        TextColumn::make('phone_number')->searchable(),
+        TextColumn::make('zip_code')->searchable(),
+        TextColumn::make('date_hired')->date()->sortable(),
         IconColumn::make('is_active')->boolean()->searchable()->sortable(),
-        Tables\Columns\TextColumn::make('date_hired')
-          ->date()->sortable(),
-        Tables\Columns\TextColumn::make('created_at')
-          ->dateTime(),
-        Tables\Columns\TextColumn::make('updated_at')
-          ->dateTime(),
+        TextColumn::make('created_at')->dateTime(),
+        TextColumn::make('updated_at')->dateTime(),
       ])
       ->filters([
         SelectFilter::make('department')->relationship('department', 'name'),
+        Filter::make('is_active')
+          ->query(fn (Builder $query): Builder => $query->where('is_active', true))
       ])
       ->actions([
         Tables\Actions\EditAction::make(),
@@ -113,7 +110,7 @@ class EmployeeResource extends Resource
   public static function getRelations(): array
   {
     return [
-      //
+      AttachmentsRelationManager::class
     ];
   }
 

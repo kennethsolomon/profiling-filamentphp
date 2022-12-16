@@ -11,11 +11,10 @@ class Attachment extends Model
 
     protected $fillable = [
         'employee_id',
-        'files',
+        'name',
+        'attachment',
         'remarks',
-        'date'
     ];
-
 
     public function employee()
     {

@@ -4,43 +4,51 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 
 class Employee extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-        'first_name',
-        'middle_name',
-        'last_name',
-        'address',
-        'city_id',
-        'state_id',
-        'country_id',
-        'department_id',
-        'zip_code',
-        'birth_date',
-        'is_active',
-        'date_hired'
-    ];
+  protected $fillable = [
+    'department_id',
+    'employee_number',
+    'first_name',
+    'middle_name',
+    'last_name',
+    'address',
+    'birth_date',
+    'phone_number',
+    'zip_code',
+    'date_hired',
+    'is_active',
+  ];
+  public static function boot()
+  {
+    parent::boot();
 
-    public function country()
-    {
-        return $this->belongsTo(Country::class);
-    }
+    self::created(function ($model) {
+      $employee_id = $model->id;
 
-    public function state()
-    {
-        return $this->belongsTo(State::class);
-    }
+      $attachment_list = Config::get('constants.attachments');
 
-    public function city()
-    {
-        return $this->belongsTo(City::class);
-    }
+      foreach ($attachment_list as $key => $attachment) {
+        Attachment::create([
+          'employee_id' => $employee_id,
+          'name' => $attachment['name'],
+          'attachment' => ''
+        ]);
+      }
+    });
+  }
 
-    public function department()
-    {
-        return $this->belongsTo(Department::class);
-    }
+  public function department()
+  {
+    return $this->belongsTo(Department::class);
+  }
+
+  public function attachments()
+  {
+    return $this->hasMany(Attachment::class);
+  }
 }
