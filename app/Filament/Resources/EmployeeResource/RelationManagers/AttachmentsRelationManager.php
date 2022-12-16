@@ -17,6 +17,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -50,7 +51,13 @@ class AttachmentsRelationManager extends RelationManager
         TextColumn::make('updated_at')->dateTime(),
       ])
       ->filters([
-        //
+        Filter::make('attachment')
+          ->label('Has Attachment')
+          ->query(fn (Builder $query): Builder => $query->where('attachment', '!=', null))
+          ->query(fn (Builder $query): Builder => $query->where('attachment', '!=', '')),
+        Filter::make('No Attachment')
+          ->query(fn (Builder $query): Builder => $query->where('attachment', '=', null))
+          ->query(fn (Builder $query): Builder => $query->where('attachment', '=', '')),
       ])
       ->headerActions([
         Tables\Actions\CreateAction::make(),
