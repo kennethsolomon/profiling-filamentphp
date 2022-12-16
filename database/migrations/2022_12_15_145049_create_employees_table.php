@@ -20,9 +20,11 @@ class CreateEmployeesTable extends Migration
             $table->foreignId('city_id')->constrained()->cascadeOnDelete();
             $table->foreignId('department_id')->constrained()->cascadeOnDelete();
             $table->string('first_name');
+            $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->string('address');
             $table->char('zip_code');
+            $table->boolean('is_active')->default(false);
             $table->date('birth_date');
             $table->date('date_hired');
             $table->timestamps();

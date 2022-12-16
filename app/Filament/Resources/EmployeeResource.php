@@ -11,10 +11,13 @@ use App\Models\State;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -56,6 +59,8 @@ class EmployeeResource extends Resource
             Forms\Components\TextInput::make('first_name')
               ->required()
               ->maxLength(255),
+            Forms\Components\TextInput::make('middle_name')
+              ->maxLength(255),
             Forms\Components\TextInput::make('last_name')
               ->required()
               ->maxLength(255),
@@ -67,6 +72,7 @@ class EmployeeResource extends Resource
               ->maxLength(255),
             Forms\Components\DatePicker::make('birth_date')
               ->required(),
+            Toggle::make('is_active')->required(),
             Forms\Components\DatePicker::make('date_hired')
               ->required(),
           ])
@@ -78,12 +84,14 @@ class EmployeeResource extends Resource
     return $table
       ->columns([
         Tables\Columns\TextColumn::make('first_name')->searchable(),
+        Tables\Columns\TextColumn::make('middle_name')->searchable(),
         Tables\Columns\TextColumn::make('last_name')->searchable(),
         Tables\Columns\TextColumn::make('department.name')->searchable()->sortable(),
         Tables\Columns\TextColumn::make('address')->searchable(),
         Tables\Columns\TextColumn::make('zip_code')->searchable(),
         Tables\Columns\TextColumn::make('birth_date')
           ->date(),
+        IconColumn::make('is_active')->boolean()->searchable()->sortable(),
         Tables\Columns\TextColumn::make('date_hired')
           ->date()->sortable(),
         Tables\Columns\TextColumn::make('created_at')
