@@ -9,6 +9,10 @@ class Attachment extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'attachment' => 'array',
+    ];
+
     protected $fillable = [
         'employee_id',
         'name',
