@@ -12,6 +12,7 @@ use App\Models\State;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -20,6 +21,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\Filter;
@@ -41,6 +43,8 @@ class EmployeeResource extends Resource
       ->schema([
         Card::make()
           ->schema([
+            FileUpload::make('photo')->preserveFilenames()->enableDownload()->columnSpan('full'),
+
             Select::make('department_id')->relationship('department', 'name')->searchable()->preload()->required(),
             TextInput::make('employee_number')->required()->maxLength(255),
             TextInput::make('first_name')->required()->maxLength(255),
@@ -61,6 +65,7 @@ class EmployeeResource extends Resource
   {
     return $table
       ->columns([
+        ImageColumn::make('photo'),
         TextColumn::make('department.name')->searchable()->sortable(),
         TextColumn::make('employee_number')->searchable(),
         TextColumn::make('first_name')->searchable(),

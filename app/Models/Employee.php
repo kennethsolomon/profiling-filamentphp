@@ -22,6 +22,7 @@ class Employee extends Model
     'zip_code',
     'date_hired',
     'is_active',
+    'photo',
   ];
   public static function boot()
   {
