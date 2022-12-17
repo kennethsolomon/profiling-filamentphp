@@ -34,7 +34,7 @@ class AttachmentsRelationManager extends RelationManager
         Card::make([
           Hidden::make('employee_id'),
           TextInput::make('name'),
-          FileUpload::make('attachment')->preserveFilenames()->enableDownload(),
+          FileUpload::make('attachment')->multiple()->preserveFilenames()->enableDownload(),
           Textarea::make('remarks'),
         ])
       ]);

@@ -37,7 +37,7 @@ class AttachmentResource extends Resource
         Card::make([
           Select::make('employee_id')->relationship('employee', 'first_name')->searchable()->preload()->required(),
           TextInput::make('name'),
-          FileUpload::make('attachment')->preserveFilenames()->enableDownload(),
+          FileUpload::make('attachment')->multiple()->preserveFilenames()->enableDownload(),
           Textarea::make('remarks'),
         ])
       ]);
