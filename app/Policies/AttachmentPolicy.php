@@ -88,7 +88,7 @@ class AttachmentPolicy
      */
     public function forceDelete(User $user, Attachment $attachment)
     {
-        return $user->can('force_delete_attachment');
+        return $user->can('{{ ForceDelete }}');
     }
 
     /**
@@ -99,7 +99,7 @@ class AttachmentPolicy
      */
     public function forceDeleteAny(User $user)
     {
-        return $user->can('force_delete_any_attachment');
+        return $user->can('{{ ForceDeleteAny }}');
     }
 
     /**
@@ -111,7 +111,7 @@ class AttachmentPolicy
      */
     public function restore(User $user, Attachment $attachment)
     {
-        return $user->can('restore_attachment');
+        return $user->can('{{ Restore }}');
     }
 
     /**
@@ -122,7 +122,7 @@ class AttachmentPolicy
      */
     public function restoreAny(User $user)
     {
-        return $user->can('restore_any_attachment');
+        return $user->can('{{ RestoreAny }}');
     }
 
     /**
@@ -134,7 +134,7 @@ class AttachmentPolicy
      */
     public function replicate(User $user, Attachment $attachment)
     {
-        return $user->can('replicate_attachment');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -145,7 +145,7 @@ class AttachmentPolicy
      */
     public function reorder(User $user)
     {
-        return $user->can('reorder_attachment');
+        return $user->can('{{ Reorder }}');
     }
 
 }

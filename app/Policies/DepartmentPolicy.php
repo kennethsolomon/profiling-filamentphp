@@ -88,7 +88,7 @@ class DepartmentPolicy
      */
     public function forceDelete(User $user, Department $department)
     {
-        return $user->can('force_delete_department');
+        return $user->can('{{ ForceDelete }}');
     }
 
     /**
@@ -99,7 +99,7 @@ class DepartmentPolicy
      */
     public function forceDeleteAny(User $user)
     {
-        return $user->can('force_delete_any_department');
+        return $user->can('{{ ForceDeleteAny }}');
     }
 
     /**
@@ -111,7 +111,7 @@ class DepartmentPolicy
      */
     public function restore(User $user, Department $department)
     {
-        return $user->can('restore_department');
+        return $user->can('{{ Restore }}');
     }
 
     /**
@@ -122,7 +122,7 @@ class DepartmentPolicy
      */
     public function restoreAny(User $user)
     {
-        return $user->can('restore_any_department');
+        return $user->can('{{ RestoreAny }}');
     }
 
     /**
@@ -134,7 +134,7 @@ class DepartmentPolicy
      */
     public function replicate(User $user, Department $department)
     {
-        return $user->can('replicate_department');
+        return $user->can('{{ Replicate }}');
     }
 
     /**
@@ -145,7 +145,7 @@ class DepartmentPolicy
      */
     public function reorder(User $user)
     {
-        return $user->can('reorder_department');
+        return $user->can('{{ Reorder }}');
     }
 
 }
