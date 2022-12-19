@@ -69,13 +69,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('email')->searchable(),
-                // Tables\Columns\BadgeColumn::make('role_id')->searchable()->colors(['primary'])
-                //     ->getStateUsing(function (Role $role) {
-                //         return $role;
-                //     }),
-
-
-                Tables\Columns\BadgeColumn::make('role_id')->getStateUsing(
+                Tables\Columns\BadgeColumn::make('role_id')->label('Role')->getStateUsing(
                     fn (User $record): string =>
                     Role::find($record->role_id)->name
                 )->colors(['primary'])->searchable(),
