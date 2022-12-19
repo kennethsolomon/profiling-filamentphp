@@ -9,7 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use JeffGreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
-
+use Spatie\Permission\Models\Role;
 
 class User extends Authenticatable
 {
@@ -24,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id'
     ];
 
     /**
@@ -44,4 +45,22 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::created(function ($model) {
+            $role_name = Role::find($model->role_id)->name;
+            $model->assignRole($role_name);
+            $model->save();
+        });
+
+        self::updated(function ($model) {
+            $role = Role::find($model->role_id);
+            $model->syncRoles([$role->name]);
+            $model->role_id = $role->id;
+            $role->save();
+        });
+    }
 }
