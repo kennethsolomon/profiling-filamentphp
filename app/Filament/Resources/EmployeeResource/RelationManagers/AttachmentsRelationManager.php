@@ -51,13 +51,13 @@ class AttachmentsRelationManager extends RelationManager
         TextColumn::make('updated_at')->dateTime(),
       ])
       ->filters([
-        Filter::make('attachment')
-          ->label('Has attachment')
-          ->query(fn (Builder $query): Builder => $query->where('attachment', '!=', null))
-          ->query(fn (Builder $query): Builder => $query->where('attachment', '!=', '')),
-        Filter::make('No Attachment')
-          ->query(fn (Builder $query): Builder => $query->where('attachment', '=', null))
-          ->query(fn (Builder $query): Builder => $query->where('attachment', '=', '')),
+        // Filter::make('attachment')
+        //   ->label('Has attachment')
+        //   ->query(fn (Builder $query): Builder => $query->where('attachment', '!=', null))
+        //   ->query(fn (Builder $query): Builder => $query->where('attachment', '!=', '')),
+        // Filter::make('No Attachment')
+        //   ->query(fn (Builder $query): Builder => $query->where('attachment', '=', null))
+        //   ->query(fn (Builder $query): Builder => $query->where('attachment', '=', '')),
       ])
       ->headerActions([
         Tables\Actions\CreateAction::make(),
